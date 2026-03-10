@@ -1,6 +1,5 @@
 package com.echocano.ai.news.infrastructure.adapter.output.ollama.client;
 
-import com.echocano.ai.news.infrastructure.adapter.output.newsapi.dto.NewsApiResponse;
 import com.echocano.ai.news.infrastructure.adapter.output.ollama.dto.OllamaRequest;
 import com.echocano.ai.news.infrastructure.adapter.output.ollama.dto.OllamaResponse;
 import com.echocano.ai.news.infrastructure.port.output.SummaryOutputPort;
