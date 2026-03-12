@@ -42,7 +42,7 @@ public class SummaryOutputAdapter implements SummaryOutputPort {
             }
         } catch (ResourceAccessException e) {
             throw new ApiNotAvailableException(String.format(
-                    "Api %s is not available at this moment", baseUrl));
+                    "AI service %s is not available at this moment", baseUrl));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NotDefineException(e.getMessage());

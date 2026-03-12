@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record ArticleResponse(
-        @JsonProperty("title") String status,
+        @JsonProperty("title") String title,
         @JsonProperty("description") String description,
         @JsonProperty("content") String content
 ) {

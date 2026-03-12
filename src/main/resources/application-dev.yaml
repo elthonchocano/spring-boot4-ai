@@ -1,0 +1,19 @@
+spring:
+  threads:
+    virtual:
+      enabled: true # Crucial for non-blocking AI calls
+
+  # Docker Compose Support
+  docker:
+    compose:
+      enabled: true
+      file: docker-compose.yml
+      lifecycle-management: start-only # Keeps Ollama running between app restarts
+
+  ai:
+    ollama:
+      # base-url is AUTOMATICALLY injected by spring-boot-docker-compose
+      chat:
+        options:
+          model: mistral:7b
+          temperature: 0.7

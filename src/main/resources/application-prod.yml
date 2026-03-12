@@ -1,0 +1,23 @@
+spring:
+  threads:
+    virtual:
+      enabled: true
+
+  # Disable Docker Compose management in production
+  docker:
+    compose:
+      enabled: false
+
+  ai:
+    ollama:
+      # Explicitly use the service name 'ollama' from docker-compose.prod.yml
+      base-url: http://ollama:11434
+      chat:
+        options:
+          model: mistral:7b
+          temperature: 0.4 # Lower temperature for more consistent prod responses
+
+  # Security & Logging
+  server:
+    error:
+      include-stacktrace: never

@@ -1,0 +1,23 @@
+services:
+  # --- Ollama:Mistral Service ---
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama-dev
+    ports:
+      - "11434:11434"
+    volumes:
+      - ${OLLAMA_MODELS_PATH}/:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
+    labels:
+      # This label tells Spring Boot NOT to shut down
+      # the container when you stop your Java app (saves time!)
+      - "org.springframework.boot.docker.compose.lifecycle.management=start-only"
+    # This command ensures Mistral is ready as soon as the container boots
+    entrypoint: /bin/sh
+    command: -c "ollama serve & sleep 10 && ollama pull mistral:7b && tail -f /dev/null"

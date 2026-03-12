@@ -1,0 +1,25 @@
+# Build artifacts
+target/
+*.jar
+*.war
+
+# IDE settings
+.idea/
+.vscode/
+*.iml
+*.swp
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Local Environment
+.env
+*.log
+
+# Docker/Maven
+.mvn/wrapper/*.jar

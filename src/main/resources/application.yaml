@@ -1,6 +1,8 @@
 spring:
   application:
     name: news-summary-api
+  profiles:
+    active: dev
 
 prompt: You are a news summarizer. Summarize the top global news stories from today in a concise and informative way. Focus on major events, political developments, economic updates, and major technology or science breakthroughs. Keep the summary clear, objective, and easy to read, like a daily news brief.
 
@@ -10,10 +12,9 @@ api:
     url:
       base: https://newsapi.org/v2
       content: /top-headlines
-
   ollama:
     url:
-      base: http://127.0.0.1:11434/api
+      base: ${OLLAMA_URL}
       generate: /generate
       body:
         model: mistral:7b
