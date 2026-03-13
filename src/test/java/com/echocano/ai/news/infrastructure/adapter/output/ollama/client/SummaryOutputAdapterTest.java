@@ -18,8 +18,7 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
 
 @AutoConfigureCache
 @RestClientTest(SummaryOutputAdapter.class)
@@ -40,6 +39,8 @@ class SummaryOutputAdapterTest {
 
     @Autowired
     private MockRestServiceServer server;
+
+    private static final String JSON_NULL_STRING = "";
 
     @Test
     @DisplayName("Should return Summary Successfully")
@@ -77,5 +78,25 @@ class SummaryOutputAdapterTest {
         this.server.expect(requestTo(baseUrl + generatePath))
                 .andRespond(withServerError()); // Simulates a 500 error
         assertThrows(NotDefineException.class, () -> adapter.getSummary("Test prompt"));
+    }
+
+    @Test
+    @DisplayName("Should throw a ApiNotAvailableException")
+    void test4() {
+        this.server.expect(requestTo(baseUrl + generatePath))
+                .andRespond(request -> {
+                    throw new ApiNotAvailableException("Null respond");
+                });
+        assertThrows(ApiNotAvailableException.class, () -> adapter.getSummary("Test prompt"));
+    }
+
+    @Test
+    @DisplayName("Should handle explicit null response from Ollama API")
+    void test5() {
+        this.server.expect(requestTo(baseUrl + generatePath))
+                .andRespond(withSuccess(JSON_NULL_STRING, MediaType.APPLICATION_JSON));
+
+        assertThrows(ApiNotAvailableException.class, () -> adapter.getSummary("Test prompt"));
+        this.server.verify();
     }
 }
