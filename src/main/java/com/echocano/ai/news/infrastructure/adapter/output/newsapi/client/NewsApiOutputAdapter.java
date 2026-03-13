@@ -18,18 +18,20 @@ public class NewsApiOutputAdapter implements ReadNewsOutputPort {
     @Value("${api.news-api.key}")
     private String apiKey;
 
-    @Value("${api.news-api.url.base}")
-    private String baseUrl;
-
     @Value("${api.news-api.url.content}")
     private String headlines;
+
+    private final String baseUrl;
+    private final RestClient restClient;
+
+    public NewsApiOutputAdapter(RestClient.Builder builder, @Value("${api.news-api.url.base}") String baseUrl) {
+        this.restClient = builder.baseUrl(baseUrl).build();
+        this.baseUrl = baseUrl;
+    }
 
     @Override
     public NewsApiResponse getNews(NewsApiRequest request) {
         NewsApiResponse response;
-        RestClient restClient = RestClient.builder()
-                .baseUrl(baseUrl)
-                .build();
         try {
             response = restClient.get().uri(headlines + "?country={country}&apiKey={apiKey}", request.getCountry(), apiKey)
                     .retrieve()

@@ -1,0 +1,7 @@
+api:
+  ollama:
+    url:
+      base: http://localhost:11434
+      generate: /api/generate
+      body:
+        model: mistral:7b

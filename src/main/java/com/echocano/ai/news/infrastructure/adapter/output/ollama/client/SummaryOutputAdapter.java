@@ -16,21 +16,23 @@ import org.springframework.web.client.RestClient;
 @Service
 public class SummaryOutputAdapter implements SummaryOutputPort {
 
-    @Value("${api.ollama.url.base}")
-    private String baseUrl;
-
     @Value("${api.ollama.url.generate}")
     private String generate;
 
     @Value("${api.ollama.url.body.model}")
     private String model;
 
+    private final String baseUrl;
+    private final RestClient restClient;
+
+    public SummaryOutputAdapter(RestClient.Builder builder, @Value("${api.ollama.url.base}") String baseUrl) {
+        this.restClient = builder.baseUrl(baseUrl).build();
+        this.baseUrl = baseUrl;
+    }
+
     @Override
     public String getSummary(String content) {
         String summary = null;
-        RestClient restClient = RestClient.builder()
-                .baseUrl(baseUrl)
-                .build();
         try {
             OllamaResponse response = restClient.post().uri(generate)
                     .contentType(MediaType.APPLICATION_JSON)
