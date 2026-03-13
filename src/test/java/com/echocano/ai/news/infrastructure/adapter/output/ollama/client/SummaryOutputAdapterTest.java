@@ -68,8 +68,8 @@ class SummaryOutputAdapterTest {
                             new IOException("Socket closed")
                     );
                 });
-
         assertThrows(ApiNotAvailableException.class, () -> adapter.getSummary("Test prompt"));
+        this.server.verify();
     }
 
     @Test
@@ -78,6 +78,7 @@ class SummaryOutputAdapterTest {
         this.server.expect(requestTo(baseUrl + generatePath))
                 .andRespond(withServerError()); // Simulates a 500 error
         assertThrows(NotDefineException.class, () -> adapter.getSummary("Test prompt"));
+        this.server.verify();
     }
 
     @Test
@@ -88,6 +89,7 @@ class SummaryOutputAdapterTest {
                     throw new ApiNotAvailableException("Null respond");
                 });
         assertThrows(ApiNotAvailableException.class, () -> adapter.getSummary("Test prompt"));
+        this.server.verify();
     }
 
     @Test
