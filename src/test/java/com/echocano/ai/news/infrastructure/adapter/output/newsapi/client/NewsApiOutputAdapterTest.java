@@ -1,6 +1,6 @@
 package com.echocano.ai.news.infrastructure.adapter.output.newsapi.client;
 
-import com.echocano.ai.news.application.exceptions.ApiNotAvailableException;
+import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
 import com.echocano.ai.news.application.exceptions.NotDefineException;
 import com.echocano.ai.news.infrastructure.adapter.output.newsapi.dto.NewsApiRequest;
 import com.echocano.ai.news.infrastructure.adapter.output.newsapi.dto.NewsApiResponse;
@@ -93,7 +93,7 @@ class NewsApiOutputAdapterTest {
                             new IOException("Socket closed")
                     );
                 });
-        assertThrows(ApiNotAvailableException.class, () -> adapter.getNews(baseRequest));
+        assertThrows(ServiceNotAvailableException.class, () -> adapter.getNews(baseRequest));
         this.server.verify();
     }
 

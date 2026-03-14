@@ -1,6 +1,6 @@
 package com.echocano.ai.news.infrastructure.adapter.input;
 
-import com.echocano.ai.news.application.exceptions.ApiNotAvailableException;
+import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
 import com.echocano.ai.news.application.exceptions.NotDefineException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class RestExceptionHandler {
 
-    @ExceptionHandler(ApiNotAvailableException.class)
+    @ExceptionHandler(ServiceNotAvailableException.class)
     public ResponseEntity<ErrorDetails> handleResourceNotFoundException(
-            ApiNotAvailableException ex, WebRequest request) {
+            ServiceNotAvailableException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 LocalDateTime.now(),
                 ex.getMessage(),

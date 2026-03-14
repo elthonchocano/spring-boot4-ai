@@ -1,6 +1,6 @@
 package com.echocano.ai.news.infrastructure.adapter.output.ollama.client;
 
-import com.echocano.ai.news.application.exceptions.ApiNotAvailableException;
+import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
 import com.echocano.ai.news.application.exceptions.NotDefineException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,9 +21,9 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
 
 @AutoConfigureCache
-@RestClientTest(SummaryOutputAdapter.class)
+@RestClientTest(ApiSummaryOutputAdapter.class)
 @ActiveProfiles("test")
-class SummaryOutputAdapterTest {
+class ApiSummaryOutputAdapterTest {
 
     @Value("${api.ollama.url.base}")
     private String baseUrl;
@@ -35,7 +35,7 @@ class SummaryOutputAdapterTest {
     private String modelName;
 
     @Autowired
-    private SummaryOutputAdapter adapter;
+    private ApiSummaryOutputAdapter adapter;
 
     @Autowired
     private MockRestServiceServer server;
@@ -68,7 +68,7 @@ class SummaryOutputAdapterTest {
                             new IOException("Socket closed")
                     );
                 });
-        assertThrows(ApiNotAvailableException.class, () -> adapter.getSummary("Test prompt"));
+        assertThrows(ServiceNotAvailableException.class, () -> adapter.getSummary("Test prompt"));
         this.server.verify();
     }
 
@@ -86,9 +86,9 @@ class SummaryOutputAdapterTest {
     void test4() {
         this.server.expect(requestTo(baseUrl + generatePath))
                 .andRespond(request -> {
-                    throw new ApiNotAvailableException("Null respond");
+                    throw new ServiceNotAvailableException("Null respond");
                 });
-        assertThrows(ApiNotAvailableException.class, () -> adapter.getSummary("Test prompt"));
+        assertThrows(ServiceNotAvailableException.class, () -> adapter.getSummary("Test prompt"));
         this.server.verify();
     }
 
@@ -98,7 +98,7 @@ class SummaryOutputAdapterTest {
         this.server.expect(requestTo(baseUrl + generatePath))
                 .andRespond(withSuccess(JSON_NULL_STRING, MediaType.APPLICATION_JSON));
 
-        assertThrows(ApiNotAvailableException.class, () -> adapter.getSummary("Test prompt"));
+        assertThrows(ServiceNotAvailableException.class, () -> adapter.getSummary("Test prompt"));
         this.server.verify();
     }
 }

@@ -1,6 +1,6 @@
 package com.echocano.ai.news.infrastructure.adapter.output.newsapi.client;
 
-import com.echocano.ai.news.application.exceptions.ApiNotAvailableException;
+import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
 import com.echocano.ai.news.application.exceptions.NotDefineException;
 import com.echocano.ai.news.infrastructure.adapter.output.newsapi.dto.NewsApiRequest;
 import com.echocano.ai.news.infrastructure.adapter.output.newsapi.dto.NewsApiResponse;
@@ -38,7 +38,7 @@ public class NewsApiOutputAdapter implements ReadNewsOutputPort {
                     .retrieve()
                     .body(NewsApiResponse.class);
         } catch (ResourceAccessException e) {
-            throw new ApiNotAvailableException(String.format(
+            throw new ServiceNotAvailableException(String.format(
                     "Api %s is not available at this moment", baseUrl));
         } catch (Exception e) {
             log.error(e.getMessage(), e);

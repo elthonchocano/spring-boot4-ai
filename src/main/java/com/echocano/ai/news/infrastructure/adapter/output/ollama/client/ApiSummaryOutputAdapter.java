@@ -1,6 +1,6 @@
 package com.echocano.ai.news.infrastructure.adapter.output.ollama.client;
 
-import com.echocano.ai.news.application.exceptions.ApiNotAvailableException;
+import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
 import com.echocano.ai.news.application.exceptions.NotDefineException;
 import com.echocano.ai.news.infrastructure.adapter.output.ollama.dto.OllamaRequest;
 import com.echocano.ai.news.infrastructure.adapter.output.ollama.dto.OllamaResponse;
@@ -8,13 +8,11 @@ import com.echocano.ai.news.infrastructure.port.output.SummaryOutputPort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 
 @Slf4j
-@Service
-public class SummaryOutputAdapter implements SummaryOutputPort {
+public class ApiSummaryOutputAdapter implements SummaryOutputPort {
 
     @Value("${api.ollama.url.generate}")
     private String generate;
@@ -25,7 +23,7 @@ public class SummaryOutputAdapter implements SummaryOutputPort {
     private final RestClient restClient;
     private final String notAvailableMsg;
 
-    public SummaryOutputAdapter(RestClient.Builder builder, @Value("${api.ollama.url.base}") String baseUrl) {
+    public ApiSummaryOutputAdapter(RestClient.Builder builder, @Value("${api.ollama.url.base}") String baseUrl) {
         this.restClient = builder.baseUrl(baseUrl).build();
         notAvailableMsg = String.format(
                 "AI service %s is not available at this moment", baseUrl);
@@ -41,13 +39,13 @@ public class SummaryOutputAdapter implements SummaryOutputPort {
                     .retrieve()
                     .body(OllamaResponse.class);
             if (response == null) {
-                throw new ApiNotAvailableException(notAvailableMsg);
+                throw new ServiceNotAvailableException(notAvailableMsg);
             }
             summary = response.getResponse();
-        } catch (ApiNotAvailableException e) {
+        } catch (ServiceNotAvailableException e) {
             throw e;
         } catch (ResourceAccessException e) {
-            throw new ApiNotAvailableException(notAvailableMsg);
+            throw new ServiceNotAvailableException(notAvailableMsg);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NotDefineException(e.getMessage());
