@@ -14,7 +14,7 @@ public class RestClientConfig {
     public RestClient.Builder restClientBuilder() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(Duration.ofSeconds(2));
-        factory.setReadTimeout(Duration.ofSeconds(15)); //this timeout for Ollama service
+        factory.setReadTimeout(Duration.ofSeconds(60)); //this timeout for Ollama service
         return RestClient.builder().requestFactory(factory);
     }
 }

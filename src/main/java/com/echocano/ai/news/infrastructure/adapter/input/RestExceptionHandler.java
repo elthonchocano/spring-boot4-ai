@@ -23,9 +23,19 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.SERVICE_UNAVAILABLE);
     }
 
+    @ExceptionHandler(NotDefineException.class)
+    public ResponseEntity<ErrorDetails> handleNotDefineException(
+            NotDefineException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleException(
-            NotDefineException ex, WebRequest request) {
+            Exception ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 LocalDateTime.now(),
                 ex.getMessage(),
