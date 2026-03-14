@@ -1,4 +1,9 @@
 api:
+  news-api:
+    key: 123456
+    url:
+      base: https://newsapi.org/v2
+      content: /top-headlines
   ollama:
     url:
       base: http://localhost:11434

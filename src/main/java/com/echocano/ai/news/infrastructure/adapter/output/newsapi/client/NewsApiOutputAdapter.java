@@ -33,7 +33,8 @@ public class NewsApiOutputAdapter implements ReadNewsOutputPort {
     public NewsApiResponse getNews(NewsApiRequest request) {
         NewsApiResponse response;
         try {
-            response = restClient.get().uri(headlines + "?country={country}&apiKey={apiKey}", request.getCountry(), apiKey)
+            response = restClient.get().uri(headlines + "?country={country}&apiKey={apiKey}"
+                            , request.getCountry(), apiKey)
                     .retrieve()
                     .body(NewsApiResponse.class);
         } catch (ResourceAccessException e) {
