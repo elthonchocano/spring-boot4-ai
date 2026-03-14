@@ -7,11 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.retry.NonTransientAiException;
 import org.springframework.ai.retry.TransientAiException;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.resilience.annotation.Retryable;
 
 @Slf4j
-@Service
+@Service("ollamaAdapter")
+@Primary
 public class ChatClientSummaryOutputAdapter implements SummaryOutputPort {
 
     private final ChatClient chatClient;
@@ -28,6 +30,7 @@ public class ChatClientSummaryOutputAdapter implements SummaryOutputPort {
     @Override
     public String getSummary(String content) {
         String summary;
+        log.info("Using chatClient");
         try {
             summary = this.chatClient.prompt()
                     .user(content)

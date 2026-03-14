@@ -1,7 +1,7 @@
 package com.echocano.ai.news.infrastructure.adapter.output.ollama.client;
 
-import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
 import com.echocano.ai.news.application.exceptions.NotDefineException;
+import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,29 +18,25 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @AutoConfigureCache
 @RestClientTest(ApiSummaryOutputAdapter.class)
 @ActiveProfiles("test")
 class ApiSummaryOutputAdapterTest {
 
+    private static final String JSON_NULL_STRING = "";
     @Value("${api.ollama.url.base}")
     private String baseUrl;
-
     @Value("${api.ollama.url.generate}")
     private String generatePath;
-
     @Value("${api.ollama.url.body.model}")
     private String modelName;
-
     @Autowired
     private ApiSummaryOutputAdapter adapter;
-
     @Autowired
     private MockRestServiceServer server;
-
-    private static final String JSON_NULL_STRING = "";
 
     @Test
     @DisplayName("Should return Summary Successfully")

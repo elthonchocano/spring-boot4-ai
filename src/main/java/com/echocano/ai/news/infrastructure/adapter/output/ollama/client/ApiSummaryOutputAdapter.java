@@ -8,10 +8,12 @@ import com.echocano.ai.news.infrastructure.port.output.SummaryOutputPort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 
 @Slf4j
+@Service("apiAdapter")
 public class ApiSummaryOutputAdapter implements SummaryOutputPort {
 
     @Value("${api.ollama.url.generate}")
