@@ -7,12 +7,13 @@ import com.echocano.ai.news.infrastructure.adapter.output.newsapi.dto.NewsApiRes
 import com.echocano.ai.news.infrastructure.port.output.ReadNewsOutputPort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 
-@Service
 @Slf4j
+@Service
 public class NewsApiOutputAdapter implements ReadNewsOutputPort {
 
     @Value("${api.news-api.key}")

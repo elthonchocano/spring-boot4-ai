@@ -7,13 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.retry.NonTransientAiException;
 import org.springframework.ai.retry.TransientAiException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.resilience.annotation.Retryable;
 
 @Slf4j
 @Service("ollamaAdapter")
-@Primary
+@ConditionalOnProperty(name = "spring.ai.provider", havingValue = "chatClient")
 public class ChatClientSummaryOutputAdapter implements SummaryOutputPort {
 
     private final ChatClient chatClient;

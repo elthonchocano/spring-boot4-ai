@@ -7,6 +7,7 @@ import com.echocano.ai.news.infrastructure.adapter.output.ollama.dto.OllamaRespo
 import com.echocano.ai.news.infrastructure.port.output.SummaryOutputPort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -14,6 +15,7 @@ import org.springframework.web.client.RestClient;
 
 @Slf4j
 @Service("apiAdapter")
+@ConditionalOnProperty(name = "spring.ai.provider", havingValue = "apiClient", matchIfMissing = true)
 public class ApiSummaryOutputAdapter implements SummaryOutputPort {
 
     @Value("${api.ollama.url.generate}")
