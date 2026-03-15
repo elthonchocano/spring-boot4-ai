@@ -1,16 +1,16 @@
 package com.echocano.ai.news.infrastructure.adapter.output.ollama.client;
 
-import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
 import com.echocano.ai.news.application.exceptions.NotDefineException;
+import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
 import com.echocano.ai.news.infrastructure.port.output.SummaryOutputPort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.retry.NonTransientAiException;
 import org.springframework.ai.retry.TransientAiException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Service;
+import org.springframework.resilience.annotation.ConcurrencyLimit;
 import org.springframework.resilience.annotation.Retryable;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service("ollamaAdapter")
@@ -28,6 +28,7 @@ public class ChatClientSummaryOutputAdapter implements SummaryOutputPort {
             maxRetries = 3,
             delay = 2000
     )
+    @ConcurrencyLimit(value = 10)
     @Override
     public String getSummary(String content) {
         String summary;

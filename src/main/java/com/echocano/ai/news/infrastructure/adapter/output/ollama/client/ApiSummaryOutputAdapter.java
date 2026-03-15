@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
+import org.springframework.resilience.annotation.ConcurrencyLimit;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
@@ -34,6 +35,7 @@ public class ApiSummaryOutputAdapter implements SummaryOutputPort {
     }
 
     @Override
+    @ConcurrencyLimit(value = 10)
     public String getSummary(String content) {
         String summary = null;
         try {
