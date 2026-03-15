@@ -1,7 +1,9 @@
 package com.echocano.ai.news.infrastructure.adapter.input;
 
+import com.echocano.ai.news.application.validators.ValidCountryCode;
 import com.echocano.ai.news.infrastructure.adapter.input.dto.NewsSummaryResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,5 +21,6 @@ public interface INewsResource {
                     , description = "AI Service or News API is currently unavailable"
                     , content = @Content(schema = @Schema(implementation = RestExceptionHandler.ErrorDetails.class)))
     })
-    ResponseEntity<NewsSummaryResponse> getSummary(String country);
+    ResponseEntity<NewsSummaryResponse> getSummary(
+            @Parameter(description = "ISO 3166-1 country code (e.g. ca, us)") @ValidCountryCode String country);
 }

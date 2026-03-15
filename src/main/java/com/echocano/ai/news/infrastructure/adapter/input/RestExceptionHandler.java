@@ -3,6 +3,8 @@ package com.echocano.ai.news.infrastructure.adapter.input;
 import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
 import com.echocano.ai.news.application.exceptions.NotDefineException;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Path;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
@@ -42,6 +45,26 @@ public class RestExceptionHandler {
                 ex.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorDetails> handleConstraintViolationException(
+            ConstraintViolationException ex, WebRequest request) {
+        String cleanMessage = ex.getConstraintViolations().stream()
+                .map(violation -> {
+                    String fieldName = "";
+                    for (Path.Node node : violation.getPropertyPath()) {
+                        fieldName = node.getName();
+                    }
+                    return String.format("Field '%s' %s", fieldName, violation.getMessage());
+                })
+                .collect(Collectors.joining("; "));
+
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                "Validation Failed: " + cleanMessage,
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
     @Schema(name = "ErrorResponse", description = "Standard error structure for API failures")
