@@ -2,6 +2,7 @@ package com.echocano.ai.news.infrastructure.adapter.input;
 
 import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
 import com.echocano.ai.news.application.exceptions.NotDefineException;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,9 +44,10 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.SERVICE_UNAVAILABLE);
     }
 
+    @Schema(name = "ErrorResponse", description = "Standard error structure for API failures")
     public record ErrorDetails (
-        LocalDateTime timestamp,
-        String message,
-        String description) {
+            @Schema(example = "2026-03-15T12:00:00") LocalDateTime timestamp,
+            @Schema(example = "Service Unavailable") String message,
+            @Schema(example = "uri=/api/v1/news") String description) {
     }
 }
