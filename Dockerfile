@@ -11,7 +11,7 @@ RUN ./mvnw dependency:go-offline -B
 
 # Copy source and build the fat jar
 COPY src ./src
-RUN ./mvnw clean package -DskipTests
+RUN ./mvnw clean package
 
 # Extract layers using the modern Spring Boot 4 launcher mode
 RUN java -Djarmode=layertools -jar target/*.jar extract
