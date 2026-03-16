@@ -1,3 +1,26 @@
+spring:
+  test:
+    observability:
+      auto-configure: true
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+    datetime:
+      dates-as-timestamps: false
+
+management:
+  # Disable OTLP exporters for local development
+  otlp:
+    metrics:
+      export:
+        enabled: false
+    tracing:
+      export:
+        enabled: false
+    logging:
+      export:
+        enabled: false
+
 api:
   news-api:
     key: 123456

@@ -22,7 +22,7 @@ public class NewsResource implements INewsResource {
     private final GetNewsSummaryInputPort summaryInputPort;
 
     @Cacheable(value = "newsSummary", key = "#root.methodName + '_' + #country")
-    @GetMapping(value = {"", "/"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<NewsSummaryResponse> getSummary(
             @RequestParam(defaultValue = "us") String country) {
         return ResponseEntity.ok(summaryInputPort.getSummary(new NewsSummaryRequest(country)));

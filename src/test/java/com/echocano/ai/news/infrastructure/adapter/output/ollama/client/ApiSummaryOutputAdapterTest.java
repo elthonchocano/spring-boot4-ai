@@ -2,11 +2,13 @@ package com.echocano.ai.news.infrastructure.adapter.output.ollama.client;
 
 import com.echocano.ai.news.application.exceptions.NotDefineException;
 import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
+import com.echocano.ai.news.infrastructure.port.output.SummaryOutputPort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.cache.test.autoconfigure.AutoConfigureCache;
+import org.springframework.boot.micrometer.metrics.test.autoconfigure.AutoConfigureMetrics;
 import org.springframework.boot.restclient.test.autoconfigure.RestClientTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -17,24 +19,35 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @AutoConfigureCache
-@RestClientTest(ApiSummaryOutputAdapter.class)
+@AutoConfigureMetrics
+@RestClientTest(
+        components = ApiSummaryOutputAdapter.class,
+        properties = "spring.ai.provider=apiClient"
+)
 @ActiveProfiles("test")
 class ApiSummaryOutputAdapterTest {
 
     private static final String JSON_NULL_STRING = "";
+
     @Value("${api.ollama.url.base}")
     private String baseUrl;
+
     @Value("${api.ollama.url.generate}")
     private String generatePath;
+
     @Value("${api.ollama.url.body.model}")
     private String modelName;
+
     @Autowired
-    private ApiSummaryOutputAdapter adapter;
+    private SummaryOutputPort adapter;
+
     @Autowired
     private MockRestServiceServer server;
 

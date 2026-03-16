@@ -2,6 +2,7 @@ package com.echocano.ai.news.infrastructure.adapter.output.ollama.client;
 
 import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
 import com.echocano.ai.news.application.exceptions.NotDefineException;
+import io.micrometer.observation.ObservationRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,8 @@ class ChatClientSummaryOutputAdapterTest {
     @BeforeEach
     void setUp() {
         when(builder.build()).thenReturn(chatClient);
-        adapter = new ChatClientSummaryOutputAdapter(builder);
+        ObservationRegistry observationRegistry = ObservationRegistry.NOOP;
+        adapter = new ChatClientSummaryOutputAdapter(builder, observationRegistry);
         when(chatClient.prompt()).thenReturn(requestSpec);
         when(requestSpec.user(anyString())).thenReturn(requestSpec);
         when(requestSpec.call()).thenReturn(responseSpec);

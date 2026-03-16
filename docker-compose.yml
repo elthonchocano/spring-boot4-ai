@@ -21,3 +21,11 @@ services:
     # This command ensures Mistral is ready as soon as the container boots
     entrypoint: /bin/sh
     command: -c "ollama serve & sleep 10 && ollama pull mistral:7b && tail -f /dev/null"
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    labels:
+      # This helps the Spring Boot Docker Compose starter identify the service
+      org.springframework.boot.service-connection: zipkin

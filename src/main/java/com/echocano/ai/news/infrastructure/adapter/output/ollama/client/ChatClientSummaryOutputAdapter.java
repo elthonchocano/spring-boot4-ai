@@ -3,6 +3,8 @@ package com.echocano.ai.news.infrastructure.adapter.output.ollama.client;
 import com.echocano.ai.news.application.exceptions.NotDefineException;
 import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
 import com.echocano.ai.news.infrastructure.port.output.SummaryOutputPort;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.retry.NonTransientAiException;
@@ -18,9 +20,11 @@ import org.springframework.stereotype.Service;
 public class ChatClientSummaryOutputAdapter implements SummaryOutputPort {
 
     private final ChatClient chatClient;
+    private final ObservationRegistry observationRegistry;
 
-    public ChatClientSummaryOutputAdapter(ChatClient.Builder builder) {
+    public ChatClientSummaryOutputAdapter(ChatClient.Builder builder, ObservationRegistry observationRegistry) {
         this.chatClient = builder.build();
+        this.observationRegistry = observationRegistry;
     }
 
     @Retryable(
@@ -34,10 +38,15 @@ public class ChatClientSummaryOutputAdapter implements SummaryOutputPort {
         String summary;
         log.info("Using chatClient");
         try {
-            summary = this.chatClient.prompt()
-                    .user(content)
-                    .call()
-                    .content();
+            Observation observation = Observation.createNotStarted("ai.summarization", observationRegistry);
+            observation.contextualName("ollama-chatClient-summary-task");
+            observation.lowCardinalityKeyValue("ai.provider", "ollama");
+            summary = observation.observe(() ->
+                    this.chatClient.prompt()
+                            .user(content)
+                            .call()
+                            .content()
+            );
         } catch (TransientAiException e) {
             throw new ServiceNotAvailableException("The summary service is temporarily unavailable. Please try again.");
         } catch (NonTransientAiException e) {
