@@ -40,8 +40,6 @@ HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
   CMD wget -q --spider http://localhost:8080/actuator/health || exit 1
 
 # 5. Performance: JVM Tuning
-# Note: For Spring Boot 3.2+/4, the launcher class moved to:
-# org.springframework.boot.loader.launch.JarLauncher
 ENTRYPOINT ["java", \
             "-XX:+UseContainerSupport", \
             "-XX:MaxRAMPercentage=75.0", \
