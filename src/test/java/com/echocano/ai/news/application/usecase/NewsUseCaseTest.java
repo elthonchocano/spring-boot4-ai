@@ -1,12 +1,12 @@
-package com.echocano.ai.news.application;
+package com.echocano.ai.news.application.usecase;
 
 import com.echocano.ai.news.application.mapper.NewsMapper;
 import com.echocano.ai.news.domain.News;
 import com.echocano.ai.news.infrastructure.adapter.input.dto.NewsSummaryRequest;
 import com.echocano.ai.news.infrastructure.adapter.input.dto.NewsSummaryResponse;
 import com.echocano.ai.news.infrastructure.adapter.output.newsapi.dto.NewsApiResponse;
-import com.echocano.ai.news.infrastructure.port.output.ReadNewsOutputPort;
-import com.echocano.ai.news.infrastructure.port.output.SummaryOutputPort;
+import com.echocano.ai.news.application.port.output.ReadNewsOutputPort;
+import com.echocano.ai.news.application.port.output.SummaryOutputPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
@@ -27,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith(MockitoExtension.class)
 class NewsUseCaseTest {
 
-    private final String testPrompt = "Please summarize the following news:";
     @Mock
     private ReadNewsOutputPort readNewsOutputPort;
     @Mock
@@ -39,7 +40,8 @@ class NewsUseCaseTest {
 
     @BeforeEach
     void setUp() {
-        ReflectionTestUtils.setField(useCase, "prompt", testPrompt);
+        Resource testResource = new ByteArrayResource("Test prompt : {headlines}".getBytes());
+        ReflectionTestUtils.setField(useCase, "promptResource", testResource);
     }
 
     @Test
@@ -67,7 +69,7 @@ class NewsUseCaseTest {
         assertEquals(countryCode, response.getCountryCode());
         assertEquals(LocalDate.now(), response.getDate());
 
-        Mockito.verify(summaryOutputPort).getSummary(ArgumentMatchers.contains(testPrompt));
+        Mockito.verify(summaryOutputPort).getSummary(ArgumentMatchers.contains("Test prompt :"));
         Mockito.verify(summaryOutputPort).getSummary(ArgumentMatchers.contains("Spring Boot 4"));
     }
 }

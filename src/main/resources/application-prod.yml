@@ -17,6 +17,10 @@ spring:
           model: mistral:7b
           temperature: 0.4 # Lower temperature for more consistent prod responses
 
+  cache:
+    caffeine:
+      spec: expireAfterWrite=12h,maximumSize=1000
+
   # Security & Logging
   server:
     error:

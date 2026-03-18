@@ -2,7 +2,7 @@ package com.echocano.ai.news.infrastructure.adapter.output.ollama.client;
 
 import com.echocano.ai.news.application.exceptions.NotDefineException;
 import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
-import com.echocano.ai.news.infrastructure.port.output.SummaryOutputPort;
+import com.echocano.ai.news.application.port.output.SummaryOutputPort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

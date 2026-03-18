@@ -2,7 +2,7 @@ package com.echocano.ai.news.infrastructure.adapter.output.ollama.client;
 
 import com.echocano.ai.news.application.exceptions.NotDefineException;
 import com.echocano.ai.news.application.exceptions.ServiceNotAvailableException;
-import com.echocano.ai.news.infrastructure.port.output.SummaryOutputPort;
+import com.echocano.ai.news.application.port.output.SummaryOutputPort;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.extern.slf4j.Slf4j;

@@ -21,6 +21,10 @@ spring:
           model: mistral:7b
           temperature: 0.7
 
+  cache:
+    caffeine:
+      spec: expireAfterWrite=5m,maximumSize=100
+
 management:
   tracing:
     sampling:

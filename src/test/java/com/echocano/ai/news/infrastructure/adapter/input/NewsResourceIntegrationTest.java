@@ -1,7 +1,7 @@
 package com.echocano.ai.news.infrastructure.adapter.input;
 
 import com.echocano.ai.news.infrastructure.adapter.input.dto.NewsSummaryResponse;
-import com.echocano.ai.news.infrastructure.port.input.GetNewsSummaryInputPort;
+import com.echocano.ai.news.application.port.input.GetNewsSummaryInputPort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +34,9 @@ class NewsResourceIntegrationTest {
     void test1() throws Exception {
         given(summaryInputPort.getSummary(any())).willReturn(new NewsSummaryResponse());
 
-        mockMvc.perform(get("/api/v1/news?country=ca"));
+        mockMvc.perform(get("/api/v1/news/summary?country=ca"));
 
-        mockMvc.perform(get("/api/v1/news?country=ca"));
+        mockMvc.perform(get("/api/v1/news/summary?country=ca"));
 
         verify(summaryInputPort, times(1)).getSummary(any());
     }

@@ -17,6 +17,9 @@ public interface INewsResource {
     @Operation(summary = "Get News Summary", description = "Fetches latest news for a country and generates an AI summary.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "400"
+                    , description = "Validation Failed"
+                    , content = @Content(schema = @Schema(implementation = RestExceptionHandler.ErrorDetails.class))),
             @ApiResponse(responseCode = "503"
                     , description = "AI Service or News API is currently unavailable"
                     , content = @Content(schema = @Schema(implementation = RestExceptionHandler.ErrorDetails.class)))

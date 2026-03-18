@@ -2,7 +2,7 @@ package com.echocano.ai.news.infrastructure.adapter.input;
 
 import com.echocano.ai.news.infrastructure.adapter.input.dto.NewsSummaryRequest;
 import com.echocano.ai.news.infrastructure.adapter.input.dto.NewsSummaryResponse;
-import com.echocano.ai.news.infrastructure.port.input.GetNewsSummaryInputPort;
+import com.echocano.ai.news.application.port.input.GetNewsSummaryInputPort;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,7 +57,7 @@ class NewsResourceTest {
                 .willReturn(mockResponse);
 
         // WHEN & THEN
-        mockMvc.perform(get("/api/v1/news")
+        mockMvc.perform(get("/api/v1/news/summary")
                         .queryParam("country", country)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))

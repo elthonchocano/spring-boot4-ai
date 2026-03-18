@@ -5,7 +5,7 @@ from diagrams.custom import Custom
 from diagrams.aws.general import User
 
 with Diagram("", show=False):
-    spring_service = Spring("Daily Brief Service")
+    spring_service = Spring("Daily Summary Service")
     ollama_node = Docker("ollama")
     news_api = Custom("News API", "./news-api.png")
 
